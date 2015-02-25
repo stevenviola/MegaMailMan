@@ -8,6 +8,7 @@ from google.appengine.ext import ndb
 
 from services.sendgrid import Sendgrid
 from services.mailgun import Mailgun
+from services.mandrill import Mandrill
 
 """
 These are the fields of entities to store 
@@ -64,16 +65,17 @@ def add_request_to_db(request):
 @endpoints.api(name='megamailman', version='v1')
 class MegaMainMan(remote.Service):
     """
-    These are all the fields required for sending mail
+    These are all the fields we need for sending mail
     """
     SEND_MAIL = endpoints.ResourceContainer(
         message_types.VoidMessage,
-        to = messages.StringField(1, repeated=True),
-        cc = messages.StringField(2, repeated=True),
-        bcc = messages.StringField(3, repeated=True),
-        sender = messages.StringField(4, required=True),
-        subject = messages.StringField(5, required=True),
-        body = messages.StringField(6)
+        to       = messages.StringField(1, repeated=True),
+        cc       = messages.StringField(2, repeated=True),
+        bcc      = messages.StringField(3, repeated=True),
+        sender   = messages.StringField(4, required=True),
+        subject  = messages.StringField(5, required=True),
+        body     = messages.StringField(6, required=True),
+        services = messages.StringField(7, repeated=True)
     )
     
     """
@@ -82,18 +84,33 @@ class MegaMainMan(remote.Service):
     Adds the request to the database for processing later
     """
     @endpoints.method(SEND_MAIL, SimpleResponse,
-        path='message', http_method='POST',
+        path='send', http_method='POST',
         name='mail.send')
     def send_email(self, request):
         # Check the request for common issues
         check_request(request)
+        # Setting default value for services if it isn't set
+        if not request.services or request.services is None:
+            requested_services = ['sendgrid','mailgun']
+        else:
+            # Deduplicate any dups in user input data
+            requested_services = []
+            for i in request.services:
+                if i not in requested_services:
+                    requested_services.append(i.lower())
         # Add the request to the DB
+        # We currently don't use this, yet...
         mail_db = add_request_to_db(request)
         # Loop through the services and try to send a message
-        services = {'sendgrid':Sendgrid(),'mailgun':Mailgun()}
-        for service_name,service_obj in services.iteritems():
-            mail_service = service_obj
-            logging.info("Attempting to send mail using %s" % service_name)
+        services = {'sendgrid':Sendgrid(),'mailgun':Mailgun(),'mandrill':Mandrill()}
+        for service_name in requested_services:
+            logging.info("Going to try and send e-mail with %s" % service_name)
+            # If the user requested a service that we don't support, skip
+            if not service_name in services:
+                logging.warning("We don't support %s. Skipping" % service_name)
+                continue
+            # Get the Object we need to call
+            mail_service = services[service_name]
             ret = mail_service.send_mail(
                 sender=request.sender,
                 to=request.to,

@@ -8,40 +8,60 @@
     </head>
     <body>
         <div class='col-lg-6'>
-            
+            <div id='alert-popup'></div>
+            <div class='well'>
+                <h2>Mega Mail Man</h2>
+            </div>
         </div>
             <div class='col-lg-6'>
                 <form id='email-form'>
-                    <input type='text' class='mail-address mail-from email-input form-control' name='from' placeholder='From'>
+                    <input type='text' type='email' class='mail-address mail-from email-input form-control' name='from' placeholder='From'>
                     <div>    
                         <div class='input-group'>
-                            <input type='text' class='mail-address mail-to email-input form-control' placeholder='To'>
+                            <input type='text' type='email' class='mail-address mail-to email-input form-control' placeholder='To'>
                             <span class='input-group-btn add-remove-btns'>
-                                <button class='add-field btn btn-default' type='button'>+</button>
+                                <button class='add-field btn btn-default' type='button'>
+                                    <span class='glyphicon glyphicon-plus-sign' aria-hidden='true'></span>
+                                </button>
                             </span>
                         </div>
                     </div>
                     <div class='row'>
                         <div class='col-lg-6'>
                             <div class='input-group'>
-                                <input type='text' class='mail-address mail-cc email-input form-control' placeholder='CC'>
+                                <input type='text' type='email' class='mail-address mail-cc email-input form-control' placeholder='CC'>
                                 <span class='input-group-btn add-remove-btns'>
-                                    <button class='add-field btn btn-default' type='button'>+</button>
+                                    <button class='add-field btn btn-default' type='button'>
+                                        <span class='glyphicon glyphicon-plus-sign' aria-hidden='true'></span>
+                                    </button>
                                 <span>
                             </div>
                         </div>
                         <div class='col-lg-6'>
                             <div class='input-group'>
-                                <input type='text' class='mail-address email-input mail-bcc form-control' placeholder='BCC'>
+                                <input type='text' type='email' class='mail-address email-input mail-bcc form-control' placeholder='BCC'>
                                 <span class='input-group-btn add-remove-btns'>
-                                    <button class='add-field btn btn-default' type='button'>+</button>
+                                    <button class='add-field btn btn-default' type='button'>
+                                        <span class='glyphicon glyphicon-plus-sign' aria-hidden='true'></span>
+                                    </button>
                                 </span>
                             </div>
                         </div>
                     </div>
                     <input type='text' class='mail-subject form-control email-input' name='subject' placeholder='Subject'>
                     <textarea class='mail-body form-control email-input' placeholder='Body' name='body' rows='5'></textarea>
-                    <button type='submit' id='email-submit' class='btn btn-primary btn-lg btn-block'>Send</button>
+                    <div>
+                        <label class='service-label'>
+                            <input class='service-selector' checked=true type="checkbox" value='sendgrid'>SendGrid
+                        </label>
+                        <label class='service-label'>
+                            <input class='service-selector' checked=true type="checkbox" value='mailgun'>MailGun
+                        </label>
+                        <label class='service-label'>
+                            <input class='service-selector' checked=true type="checkbox" value='mandrill'>Mandrill
+                        </label>
+                    </div>
+                    <button type='submit' id='email-submit' class='btn btn-primary btn-lg btn-block' disabled='disabled'>Send</button>
                 </form>
         </div>
         <script type='text/javascript' src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>
