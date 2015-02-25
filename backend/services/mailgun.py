@@ -13,12 +13,12 @@ from google.appengine.api import urlfetch
 class Mailgun():
     """
     Args:
-    sender  | String - The e-mail address of the sender of the e-mail
-    to      | String/List - The address to send the message to
-    subject | String - The subject for the message
-    body    | String - The body text of the message
-    cc      | String/List - Optional - cc recipients to include on e-mail
-    bcc     | String/List - Optional - bcc recipients to include on e-mail
+    sender  | String | Required | The e-mail address of the sender of the e-mail
+    to      | List   | Required | The address to send the message to
+    subject | String | Required | The subject for the message
+    body    | String | Required | The body text of the message
+    cc      | List   | Optional | cc recipients to include on e-mail
+    bcc     | List   | Optional | bcc recipients to include on e-mail
 
     Returns:
     True on success
@@ -38,14 +38,10 @@ class Mailgun():
             'text':body
         }
         for key,value in recipents.iteritems():
-            if value is not None:
-                # If we have a list, it need to be comma delimited
-                if type(value) is list:
-                    payload[key] = ','.join(value)
-                elif type(value) is str:
-                    payload[key] = value
-                else:
-                    logging.warning("Got unknown type of variable for %s" % key)
+            # Ensure the value is set and not None
+            if value and value is not None:
+                # Append the key with values to the payload
+                payload[key] = ','.join(value)
         payload_encoded = urllib.urlencode(payload)
         logging.info("Sending mail with the following url: %s" % url)
         logging.info("Adding the following payload: %s" % payload_encoded)

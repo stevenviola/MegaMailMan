@@ -6,9 +6,22 @@ api_version: 1
 
 handlers:
 # Endpoints handler
-- url: /test
-  script: mail.app
+- url: /_ah/spi/.*
+  script: backend.megamailman.api
+- url: /css
+  static_dir: frontend/static/css
+- url: /js
+  static_dir: frontend/static/js
+- url: /img
+  static_dir: frontend/static/img
+# Catch all to display the frontend
+- url: /.*
+  script: frontend.index.app
 
 libraries:
 - name: webapp2
+  version: latest
+- name: endpoints
+  version: 1.0
+- name: jinja2
   version: latest

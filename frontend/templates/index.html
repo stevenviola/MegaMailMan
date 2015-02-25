@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+    <head>
+        <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css'>
+        <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css'>
+        <link rel='stylesheet' type='text/css' href='css/style.css'>
+    </head>
+    <body>
+        <div class='col-lg-6'>
+            
+        </div>
+            <div class='col-lg-6'>
+                <form id='email-form'>
+                    <input type='text' class='mail-address mail-from email-input form-control' name='from' placeholder='From'>
+                    <div>    
+                        <div class='input-group'>
+                            <input type='text' class='mail-address mail-to email-input form-control' placeholder='To'>
+                            <span class='input-group-btn add-remove-btns'>
+                                <button class='add-field btn btn-default' type='button'>+</button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class='row'>
+                        <div class='col-lg-6'>
+                            <div class='input-group'>
+                                <input type='text' class='mail-address mail-cc email-input form-control' placeholder='CC'>
+                                <span class='input-group-btn add-remove-btns'>
+                                    <button class='add-field btn btn-default' type='button'>+</button>
+                                <span>
+                            </div>
+                        </div>
+                        <div class='col-lg-6'>
+                            <div class='input-group'>
+                                <input type='text' class='mail-address email-input mail-bcc form-control' placeholder='BCC'>
+                                <span class='input-group-btn add-remove-btns'>
+                                    <button class='add-field btn btn-default' type='button'>+</button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <input type='text' class='mail-subject form-control email-input' name='subject' placeholder='Subject'>
+                    <textarea class='mail-body form-control email-input' placeholder='Body' name='body' rows='5'></textarea>
+                    <button type='submit' id='email-submit' class='btn btn-primary btn-lg btn-block'>Send</button>
+                </form>
+        </div>
+        <script type='text/javascript' src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>
+        <script type='text/javascript' src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js'></script>
+        <script type='text/javascript' src='http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js'></script>
+        <script type='text/javascript' src='/js/megamailman.js'></script>
+        <script src='https://apis.google.com/js/client.js?onload=init'></script>
+    </body>    
+</html>
+{% endautoescape %}

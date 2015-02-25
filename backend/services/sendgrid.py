@@ -12,12 +12,12 @@ from google.appengine.api import urlfetch
 class Sendgrid():
     """
     Args:
-    sender  | String - The e-mail address of the sender of the e-mail
-    to      | String/List - The address to send the message to
-    subject | String - The subject for the message
-    body    | String - The body text of the message
-    cc      | String/List - Optional - cc recipients to include on e-mail
-    bcc     | String/List - Optional - bcc recipients to include on e-mail
+    sender  | String | Required | The e-mail address of the sender of the e-mail
+    to      | List   | Required | The address to send the message to
+    subject | String | Required | The subject for the message
+    body    | String | Required | The body text of the message
+    cc      | List - Optional - cc recipients to include on e-mail
+    bcc     | List - Optional - bcc recipients to include on e-mail
 
     Returns:
     True on success
@@ -35,17 +35,13 @@ class Sendgrid():
             'text':body
         })
         for key,value in recipents.iteritems():
-            if value is not None:
-                # If we have a list, it need to be in this stupid weird format
+            # Ensure the value is set and not None
+            if value and value is not None:
+                # The list of people needs to be in this stupid weird format
                 # Format is 'to[]=a@mail.com[]=b@mail.com' according to docs
-                if type(value) is list:
-                    append_string = '&'.join([key+"[]="+urllib.quote_plus(s) for s in value])
-                elif type(value) is str:
-                    append_string = urllib.urlencode({key:value})
-                else:
-                    logging.error("Got unknown type of variable for %s" % key)
-                    return False
+                append_string = '&'.join([key+"[]="+urllib.quote_plus(s) for s in value])
                 logging.info("Appending %s to the payload" % append_string)
+                # Append the key with values to the payload
                 payload_encoded += '&%s' % append_string
         logging.info("Sending mail with the following url: %s" % url)
         logging.info("Sending with the following payload: %s" % payload_encoded)
