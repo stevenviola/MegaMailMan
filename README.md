@@ -3,7 +3,7 @@
 
 MegaMailMan is a service which can send e-mail through several different e-mail providers, such as SendGrid, MailGun, and Mandrill. MegaMailMan is able to switch between providers depending on availability of the service or based on user preference. MegaMailMan provides a RESTful API for specifying different fields of an e-mail, which are translated to the specifications of the service being used to send the e-mail.
 
-MegaMailMan is mainly a backend application deployed on Google App Engine, but does have a simple frontend to interact with the functionality of the API
+MegaMailMan is mainly a backend application deployed on Google App Engine, but does have a simple frontend to interact with the functionality of the API. The application is currently deployed on Google App Engine and can be accessed here: https://mega-mailman.appspot.com/. The API can be interactivly tested using this frontend, or [Google's API Explorer](http://apis-explorer.appspot.com/apis-explorer/?base=https://mega-mailman.appspot.com/_ah/api#p/megamailman/v1/megamailman.mail.send). Details about the technologies used for this application are [documented further down in this README](https://github.com/stevenviola/MegaMailMan#technologies-used)
 
 ![Standards](http://imgs.xkcd.com/comics/standards.png)
 
