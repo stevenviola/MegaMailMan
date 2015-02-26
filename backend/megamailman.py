@@ -91,7 +91,7 @@ class MegaMainMan(remote.Service):
         check_request(request)
         # Setting default value for services if it isn't set
         if not request.services or request.services is None:
-            requested_services = ['sendgrid','mailgun']
+            requested_services = ['sendgrid','mailgun','mandrill']
         else:
             # Deduplicate any dups in user input data
             requested_services = []
