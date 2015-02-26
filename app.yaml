@@ -1,4 +1,4 @@
-application: megamailman
+application: mega-mailman
 version: 1
 runtime: python27
 threadsafe: true
@@ -8,6 +8,7 @@ handlers:
 # Endpoints handler
 - url: /_ah/spi/.*
   script: backend.megamailman.api
+  secure: always
 - url: /css
   static_dir: frontend/static/css
 - url: /js
@@ -17,6 +18,7 @@ handlers:
 # Catch all to display the frontend
 - url: /.*
   script: frontend.index.app
+  secure: always
 
 libraries:
 - name: webapp2

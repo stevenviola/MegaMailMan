@@ -12,8 +12,13 @@ value = config.key
 
 import yaml
 import sys
+import logging
 
 thismodule = sys.modules[__name__]
+enabled_services = []
 with open("config.yaml", 'r') as ymlfile:
     for key,value in yaml.load(ymlfile).iteritems():
-    	setattr(thismodule, key, value)
+        enabled_services.append(key)
+        setattr(thismodule, key, value)
+        logging.info("Enabling the service %s" % key)
+    setattr(thismodule, 'enabled_services', enabled_services)

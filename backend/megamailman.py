@@ -3,6 +3,7 @@ import json
 import logging
 
 import re
+import config
 
 from protorpc import messages
 from protorpc import message_types
@@ -13,6 +14,15 @@ from google.appengine.ext import ndb
 from services.sendgrid import Sendgrid
 from services.mailgun import Mailgun
 from services.mandrill import Mandrill
+
+"""
+Define the Objects to be used for each Service.
+"""
+services = {
+    'sendgrid':Sendgrid(),
+    'mailgun' :Mailgun(),
+    'mandrill':Mandrill()
+}
 
 """
 These are the fields of entities to store 
@@ -132,18 +142,22 @@ class MegaMainMan(remote.Service):
         check_request(request)
         # Setting default value for services if it isn't set
         if not request.services or request.services is None:
-            requested_services = ['sendgrid','mailgun','mandrill']
+            requested_services = config.enabled_services
         else:
             # Deduplicate any dups in user input data
+            logging.info("Got request to process using certain services")
             requested_services = []
             for i in request.services:
-                if i not in requested_services:
-                    requested_services.append(i.lower())
+                service_lower = i.lower()
+                if service_lower in config.enabled_services:
+                    if service_lower not in requested_services:
+                        requested_services.append(service_lower)
+                else:
+                    logging.warning("Got requested service %s which we don't support" % service_lower)
         # Add the request to the DB
         # We currently don't use this, yet...
         mail_db = add_request_to_db(request)
         # Loop through the services and try to send a message
-        services = {'sendgrid':Sendgrid(),'mailgun':Mailgun(),'mandrill':Mandrill()}
         for service_name in requested_services:
             logging.info("Going to try and send e-mail with %s" % service_name)
             # If the user requested a service that we don't support, skip

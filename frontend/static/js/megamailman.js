@@ -2,7 +2,7 @@
 Initialize the MegaMailMan API using gapi
 */
 function init(){
-    apiRoot = '//' + window.location.host + '/_ah/api';
+    apiRoot = location.protocol+'//'+ window.location.host+'/_ah/api';
     gapi.client.load('megamailman', 'v1',function() {
         console.log("MegaMailMan should be loaded now");
         $('#email-submit').removeAttr('disabled');
@@ -145,7 +145,7 @@ $(document).ready(function () {
     */
     $('#api_explorer').attr(
         'href',
-        'http://apis-explorer.appspot.com/apis-explorer/?base=http://'+window.location.host+'/_ah/api#p/megamailman/v1/megamailman.mail.send'
+        'http://apis-explorer.appspot.com/apis-explorer/?base='+location.protocol+'//'+window.location.host+'/_ah/api#p/megamailman/v1/megamailman.mail.send'
     )
     /*
     Validate the Subject and From fields

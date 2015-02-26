@@ -1,0 +1,20 @@
+"""
+ Fill out the information in this template.
+ Run the following command to copy into place
+ $ cp config.template.yaml config.yaml
+"""
+
+sendgrid:
+    url: https://api.sendgrid.com/api
+    user: <username>
+    password: <password>
+
+mailgun:
+    url: https://api.mailgun.net/v2
+    domain: <subdomain>.mailgun.org
+    user: api
+    password: <key from website here>
+
+mandrill:
+    url: https://mandrillapp.com/api/1.0
+    key: <key from website here>

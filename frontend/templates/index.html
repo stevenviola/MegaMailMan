@@ -12,7 +12,7 @@
                 <div class='well well-lg'>
                     <div>
                         <p class="lead">
-                            MegaMailMan is a service which can send e-mail through several different e-mail providers, such as SendGrid, MailGun, and Mandrill. MegaMailMan is able to switch between providers depending on availability of the service or based on user preference. MegaMailMan provides a RESTful API for specifying different fields of an e-mail, which are translated to the specifications of the service being used to send the e-mail.
+                            MegaMailMan is a service which can send e-mail through several different e-mail providers, such as SendGrid, MailGun, and Mandrill. MegaMailMan is able to switch between providers depending on availability of the service or based on user preference. MegaMailMan provides a RESTful API for specifying different fields of an e-mail, which are translated to the specifications of the service being used to send the e-mail. The full source for MegaMailMan can be found on <a href='https://github.com/stevenviola/MegaMailMan'>Steven Viola's GitHub</a>
                         </p>
                         <h3>Webapp</h3>
                         <p>
@@ -28,12 +28,12 @@
                         </p>
                         <p>
                         The MegaMailMan API takes a JSON object in a post request with the necessary fields. The following cURL is an example on how easy it is to send an e-mail using this API
-                        <pre>curl http://megamailman.appspot.com/_ah/api/megamailman/v1/send -d '{"sender":"from@sender.com","subject":"Subject","body":"HELLO WORLD!!!","cc":["cc1@example.com","cc2@example.com"],"to":["to1@example.com","to2@example.com"]}'</pre>
+                        <pre>curl https://mega-mailman.appspot.com/_ah/api/megamailman/v1/send -d '{"sender":"from@sender.com","subject":"Subject","body":"HELLO WORLD!!!","cc":["cc1@example.com","cc2@example.com"],"to":["to1@example.com","to2@example.com"]}'</pre>
                         The API will return a JSON object informing the user the request was successful and provides which service the e-mail was sent with. The API returns with an HTTP status code of 200 when the API request succeeds. An example response is:
                         <pre>{
      "message": "Sent Mail", 
      "service": "sendgrid"
-    }</pre>
+}</pre>
                         In the event that there is a syntax error with the information in the request, the request will return a 400 error, and a JSON object with more details, like so:
                         <pre>{
      "error": {
@@ -47,7 +47,7 @@
       ], 
       "message": "The address  in the to field is invalid"
      }
-    }</pre>
+}</pre>
                         If the API request can not send an e-mail with any of the preferred or default services, or if there is an internal server error, then a response code of 503 will be returned. In this response, there will also be a JSON object detailing more information behind the error
                         <pre>{
      "error": {
@@ -61,7 +61,7 @@
       ], 
       "message": "Exhausted services to send email with"
      }
-    }</pre>
+}</pre>
                         </p>
                     </div>
                 </div>
@@ -123,7 +123,7 @@
         </div>
         <script type='text/javascript' src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>
         <script type='text/javascript' src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js'></script>
-        <script type='text/javascript' src='http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js'></script>
+        <script type='text/javascript' src='https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js'></script>
         <script type='text/javascript' src='/js/megamailman.js'></script>
         <script src='https://apis.google.com/js/client.js?onload=init'></script>
     </body>    
