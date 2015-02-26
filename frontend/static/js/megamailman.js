@@ -44,7 +44,14 @@ function send_mail(sender,to,cc,bcc,subject,body,services) {
         // Undisable the submit button to try again
         $('#email-submit').removeAttr('disabled');
         console.log("Error sending e-mail. Reason is: "+reason.result.error.message);
-        add_alert('danger',"Error sending e-mail. Got error: "+reason.result.error.message);
+        if(reason.status == 400) {
+            // If the message is a 400 message, then the issue should be a warning
+            alert_type = 'warning';
+        } else {
+            // Else, this is another issue
+            alert_type = 'danger';
+        }  
+        add_alert(alert_type,"Error sending e-mail. Got error: "+reason.result.error.message);
     });
 }
 
@@ -132,6 +139,14 @@ $( "body" ).delegate( ".remove-field", "click", function() {
 });
 
 $(document).ready(function () {
+    /*
+    For the webapp, generate the URL of the API Explorer 
+    to use based on the window location host
+    */
+    $('#api_explorer').attr(
+        'href',
+        'http://apis-explorer.appspot.com/apis-explorer/?base=http://'+window.location.host+'/_ah/api#p/megamailman/v1/megamailman.mail.send'
+    )
     /*
     Validate the Subject and From fields
     To, cc, and bcc difficult to validate 

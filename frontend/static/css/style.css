@@ -8,3 +8,13 @@ body {
     margin-bottom: 7px;
     margin-top: 7px;
 }
+
+input[type=checkbox]{
+    margin-right: 8px;
+}
+
+@media (max-width: 992px) {
+    .affix {
+        position: static;
+    }
+}

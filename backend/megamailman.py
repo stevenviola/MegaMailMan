@@ -1,9 +1,13 @@
 import endpoints
 import json
 import logging
+
+import re
+
 from protorpc import messages
 from protorpc import message_types
 from protorpc import remote
+
 from google.appengine.ext import ndb
 
 from services.sendgrid import Sendgrid
@@ -34,15 +38,52 @@ class SimpleResponse(messages.Message):
     service= messages.StringField(2)  
 
 """
+Parses the email address passed and raises 
+an exception if there is an issue
+"""
+def check_email(address,field):
+    # Regex to check for email address
+    # Regex by http://www.regular-expressions.info/email.html
+    # Modified slightly for new TLD, including .co.uk
+    parsed = re.search('^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z\.]{2,6}$',address,re.IGNORECASE)
+    #logging.info("Parsed email field is %s" % parsed[1])
+    if not parsed:
+        # This isn't a valid e-mail address
+        message = "The address %s in the %s field is invalid" % (address,field)
+        logging.error(message)
+        raise endpoints.BadRequestException(message)
+    else:
+        logging.info("Address %s is valid for %s field" % (address,field))
+
+"""
 Checks the request for common issues
 Raises exceptions if there are issues
 """
 def check_request(request):
-    # Need to make sure there is a to 
-    if not request.to or request.to is None:
-        message = "No recipient in the too field"
-        logging.error(message)
-        raise endpoints.BadRequestException(message)
+    # Need to make sure these fields are present in the request
+    required_fields = ['to','sender','subject','body']
+    email_fields = ['to','cc','bcc']
+    for req_field in required_fields:
+        # Make sure the attribute is in the object
+        # and is not none or empty string, else, raise exception
+        attr = getattr(request, req_field,None)
+        if not attr or attr is None or attr == "":
+            message = "Nothing set for the %s field" % req_field
+            logging.error(message)
+            raise endpoints.BadRequestException(message)
+        else:
+            logging.info("Got field %s with value %s" % (req_field,attr))
+    for email_field in email_fields:
+        # Verify that these address follow the format for e-mails
+        # Some e-mail providers accept non valid addresses and some don't
+        # Need to conform with least common denominator
+        attr = getattr(request, email_field,None)
+        for address in attr:
+            check_email(address,email_field)
+    # The sender field is not repeatable, so 
+    # need to check it separately here
+    check_email(request.sender,'sender')
+            
 
 """
 Add the request to the DB before

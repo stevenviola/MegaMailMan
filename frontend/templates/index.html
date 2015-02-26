@@ -7,39 +7,73 @@
         <link rel='stylesheet' type='text/css' href='css/style.css'>
     </head>
     <body>
-        <div class='col-lg-6'>
-            <div id='alert-popup'></div>
-            <div class='well'>
-                <h2>Mega Mail Man</h2>
-            </div>
-        </div>
-            <div class='col-lg-6'>
-                <form id='email-form'>
-                    <input type='text' type='email' class='mail-address mail-from email-input form-control' name='from' placeholder='From'>
-                    <div>    
-                        <div class='input-group'>
-                            <input type='text' type='email' class='mail-address mail-to email-input form-control' placeholder='To'>
-                            <span class='input-group-btn add-remove-btns'>
-                                <button class='add-field btn btn-default' type='button'>
-                                    <span class='glyphicon glyphicon-plus-sign' aria-hidden='true'></span>
-                                </button>
-                            </span>
-                        </div>
+        <div class='row-fluid'>
+            <div class='col-lg-7 col-md-6'>
+                <div class='well well-lg'>
+                    <div>
+                        <p class="lead">
+                            MegaMailMan is a service which can send e-mail through several different e-mail providers, such as SendGrid, MailGun, and Mandrill. MegaMailMan is able to switch between providers depending on availability of the service or based on user preference. MegaMailMan provides a RESTful API for specifying different fields of an e-mail, which are translated to the specifications of the service being used to send the e-mail.
+                        </p>
+                        <h3>Webapp</h3>
+                        <p>
+                            This webapp demonstrates the features of the MegaMailMan API. Through this app, you can fill out the fields of the e-mail, and select from the available services which services you want to try to send an e-mail with. If no services are selected, than by default, the API will try to send an e-mail via all available services, sequentially as they are listed in this app, until the e-mail is sent successfully. When you submit the e-mail information, a message will appear letting you know your e-mail was sent and what service it was sent with. If there is an error with a field, you will get a warning. In the event that none of the selected services are available for use, an error message will appear informing you the e-mail could not be sent. 
+                        </p>
+                        <h3>Explore API</h3>
+                        <p>
+                            This API is built using Google Cloud Endpoints, which provides an API Explorer User interface to interactively test the API without the need of a client application. You can access <a id='api_explorer'>the API Explorer for MegaMailMan here</a>. The API Explorer will provide useful information for testing different scenarios, including response headers, the raw JSON Response, and the Fields used to POST the information to the API
+                        </p>
+                        <h3>Use API</h3>
+                        <p>
+                            You can also invoke the API using tools like cURL or the <a href='https://cloud.google.com/appengine/docs/python/endpoints/consume_js'>Google Javascript client library</a> and everything in between. This webapp implements the Google Javascript Client Library in order to interact with the MegaMailMan API. For running through automated tests, cURL is used. Through both tools, we can invoke the same API in order to send e-mails.
+                        </p>
+                        <p>
+                        The MegaMailMan API takes a JSON object in a post request with the necessary fields. The following cURL is an example on how easy it is to send an e-mail using this API
+                        <pre>curl http://megamailman.appspot.com/_ah/api/megamailman/v1/send -d '{"sender":"from@sender.com","subject":"Subject","body":"HELLO WORLD!!!","cc":["cc1@example.com","cc2@example.com"],"to":["to1@example.com","to2@example.com"]}'</pre>
+                        The API will return a JSON object informing the user the request was successful and provides which service the e-mail was sent with. The API returns with an HTTP status code of 200 when the API request succeeds. An example response is:
+                        <pre>{
+     "message": "Sent Mail", 
+     "service": "sendgrid"
+    }</pre>
+                        In the event that there is a syntax error with the information in the request, the request will return a 400 error, and a JSON object with more details, like so:
+                        <pre>{
+     "error": {
+      "code": 400, 
+      "errors": [
+       {
+        "domain": "global", 
+        "message": "The address  in the to field is invalid", 
+        "reason": "badRequest"
+       }
+      ], 
+      "message": "The address  in the to field is invalid"
+     }
+    }</pre>
+                        If the API request can not send an e-mail with any of the preferred or default services, or if there is an internal server error, then a response code of 503 will be returned. In this response, there will also be a JSON object detailing more information behind the error
+                        <pre>{
+     "error": {
+      "code": 503, 
+      "errors": [
+       {
+        "domain": "global", 
+        "message": "Exhausted services to send email with", 
+        "reason": "backendError"
+       }
+      ], 
+      "message": "Exhausted services to send email with"
+     }
+    }</pre>
+                        </p>
                     </div>
-                    <div class='row'>
-                        <div class='col-lg-6'>
+                </div>
+            </div>
+            <div class='col-lg-5 col-md-6'>
+                <div id='webapp' data-spy="affix" data-offset-top="50">
+                    <div id='alert-popup'></div>
+                    <form id='email-form'>
+                        <input type='text' type='email' class='mail-address mail-from email-input form-control' name='from' placeholder='From'>
+                        <div>    
                             <div class='input-group'>
-                                <input type='text' type='email' class='mail-address mail-cc email-input form-control' placeholder='CC'>
-                                <span class='input-group-btn add-remove-btns'>
-                                    <button class='add-field btn btn-default' type='button'>
-                                        <span class='glyphicon glyphicon-plus-sign' aria-hidden='true'></span>
-                                    </button>
-                                <span>
-                            </div>
-                        </div>
-                        <div class='col-lg-6'>
-                            <div class='input-group'>
-                                <input type='text' type='email' class='mail-address email-input mail-bcc form-control' placeholder='BCC'>
+                                <input type='text' type='email' class='mail-address mail-to email-input form-control' placeholder='To'>
                                 <span class='input-group-btn add-remove-btns'>
                                     <button class='add-field btn btn-default' type='button'>
                                         <span class='glyphicon glyphicon-plus-sign' aria-hidden='true'></span>
@@ -47,22 +81,45 @@
                                 </span>
                             </div>
                         </div>
-                    </div>
-                    <input type='text' class='mail-subject form-control email-input' name='subject' placeholder='Subject'>
-                    <textarea class='mail-body form-control email-input' placeholder='Body' name='body' rows='5'></textarea>
-                    <div>
-                        <label class='service-label'>
-                            <input class='service-selector' checked=true type="checkbox" value='sendgrid'>SendGrid
-                        </label>
-                        <label class='service-label'>
-                            <input class='service-selector' checked=true type="checkbox" value='mailgun'>MailGun
-                        </label>
-                        <label class='service-label'>
-                            <input class='service-selector' checked=true type="checkbox" value='mandrill'>Mandrill
-                        </label>
-                    </div>
-                    <button type='submit' id='email-submit' class='btn btn-primary btn-lg btn-block' disabled='disabled'>Send</button>
-                </form>
+                        <div class='row'>
+                            <div class='col-lg-6'>
+                                <div class='input-group'>
+                                    <input type='text' type='email' class='mail-address mail-cc email-input form-control' placeholder='CC'>
+                                    <span class='input-group-btn add-remove-btns'>
+                                        <button class='add-field btn btn-default' type='button'>
+                                            <span class='glyphicon glyphicon-plus-sign' aria-hidden='true'></span>
+                                        </button>
+                                    <span>
+                                </div>
+                            </div>
+                            <div class='col-lg-6'>
+                                <div class='input-group'>
+                                    <input type='text' type='email' class='mail-address email-input mail-bcc form-control' placeholder='BCC'>
+                                    <span class='input-group-btn add-remove-btns'>
+                                        <button class='add-field btn btn-default' type='button'>
+                                            <span class='glyphicon glyphicon-plus-sign' aria-hidden='true'></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <input type='text' class='mail-subject form-control email-input' name='subject' placeholder='Subject'>
+                        <textarea class='mail-body form-control email-input' placeholder='Body' name='body' rows='5'></textarea>
+                        <div>
+                            <label class='service-label'>
+                                <input class='service-selector' checked=true type="checkbox" value='sendgrid'>SendGrid
+                            </label>
+                            <label class='service-label'>
+                                <input class='service-selector' checked=true type="checkbox" value='mailgun'>MailGun
+                            </label>
+                            <label class='service-label'>
+                                <input class='service-selector' checked=true type="checkbox" value='mandrill'>Mandrill
+                            </label>
+                        </div>
+                        <button type='submit' id='email-submit' class='btn btn-primary btn-lg btn-block' disabled='disabled'>Send</button>
+                    </form>
+                </div>
+            </div>
         </div>
         <script type='text/javascript' src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>
         <script type='text/javascript' src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js'></script>
