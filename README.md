@@ -319,3 +319,22 @@ Although this is mainly a backend focused application, the frontend is intended 
 ### jQuery
 
 The Interface has several options that repeat, such as the To, CC, and BCC, and by using [jQuery](http://jquery.com/), I can easily clone the DOM elements for these so the user can add and remove recipients when filling out the form. I am also using a [jQuery validation plugin](http://jqueryvalidation.org/) to validate the form fields that are required.
+
+## TODO
+
+There were some things that had to be left out from this project due to time constraints and for simplicity sake.
+
+- OAuth Security on the API
+    - The API needs security in order not to be a method for bad people to use for sending spam. The added benefit with adding OAuth is being able to keep track of the users e-mails for retrieval in the future.
+
+- Get listing of sent e-mails
+    - Coupled with the OAuth Security, this feature would allow the logged in user to get a list of e-mails only they sent. You would only get e-mails you sent, and not ones that other users have sent
+
+- Handling webhook callbacks from services
+    - Documented in the API for the services used, there are webhooks that the service can send if the e-mail was bounced back, or successfully delivered. Originally, this was planned to handle the async callbacks from the services in order to update the state of the email stored in the datastore
+
+## Credit
+
+All code was written by Steven Viola.
+
+E-mail services provided by SendGrid, MailGun, and Mandrill.
